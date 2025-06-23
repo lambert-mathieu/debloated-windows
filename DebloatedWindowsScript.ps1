@@ -158,11 +158,10 @@ function Show-SoftwareMenu {
 # Install Software Menu
 function Show-AppInstallMenu {
     Show-Menu -menuTitle "Select an app to install" `
-        -options @("Microsoft Store", "Browser Menu", "UniGetUI (Software Manager)") `
+        -options @("Browser Menu", "UniGetUI (Software Manager)") `
         -actions @{
-        "1" = { Install-Store }
-        "2" = { Show-BrowserInstallMenu }
-        "3" = { Install-AppWithWinGet -AppName "MartiCliment.UniGetUI" -FriendlyName "UniGetUI (Software Manager)" }
+        "1" = { Show-BrowserInstallMenu }
+        "2" = { Install-AppWithWinGet -AppName "MartiCliment.UniGetUI" -FriendlyName "UniGetUI (Software Manager)" }
     } `
         -showHeader
 }
@@ -276,32 +275,6 @@ function Test-InternetConnection {
     Catch {
         return $false
     }
-}
-
-# Install the Microsoft Store
-function Install-Store {
-    Clear-Host
-    # Check for internet connection
-    if (-not (Test-InternetConnection)) {
-        Write-Host "No internet connection detected. Please connect to the internet and try again." -BackgroundColor Red
-        Wait-IfNotSpecialize
-        return
-    }
-
-    # If internet connection is available, continue with installation
-    Show-Header
-    Write-Host "Installing Microsoft Store . . ."
-    Try {
-        wsreset -i -ErrorAction SilentlyContinue
-        Show-Header
-        Write-Host "Microsoft Store is being installed silently in the background." -BackgroundColor Green
-        Write-Host "Please allow a few minutes for it to install and use it to reinstall the necessary apps manually."
-    }
-    Catch {
-        Show-Header
-        Write-Host "An error occurred while trying to install the Microsoft Store. Please try again later." -BackgroundColor Red
-    }
-    Wait-IfNotSpecialize
 }
 
 # Function to check if WinGet is installed, install if necessary, and check for updates
@@ -523,7 +496,7 @@ $appxPackages = @(
     'Microsoft.XboxSpeechToTextOverlay', 'Microsoft.GamingApp', 'Microsoft.YourPhone', 'Microsoft.OneDrive',
     'Microsoft.549981C3F5F10', 'Microsoft.MixedReality.Portal', 'Microsoft.ScreenSketch'
     'Microsoft.Windows.Ai.Copilot.Provider', 'Microsoft.Copilot', 'Microsoft.Copilot_8wekyb3d8bbwe',
-    'Microsoft.WindowsMeetNow', 'Microsoft.WindowsStore', 'Microsoft.Paint', 'Microsoft.MSPaint'
+    'Microsoft.WindowsMeetNow', 'Microsoft.Paint', 'Microsoft.MSPaint'
 )
 
 # Define Windows Capabilities
@@ -1178,11 +1151,6 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense]
 "AllowStorageSenseGlobal"=dword:00000000
 
-; --OTHER--
-; Disable update Microsoft Store apps automatically
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore]
-"AutoDownload"=dword:00000002
-
 ; UWP APPS
 ; disable background apps
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy]
@@ -1417,10 +1385,6 @@ Windows Registry Editor Version 5.00
 
 ; storage sense
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense]
-
-; --OTHER--
-; Enable update Microsoft Store apps automatically
-[-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore]
 
 ; --CAN'T DO NATIVELY--
 ; UWP APPS
